@@ -12,24 +12,27 @@ class Message extends Component {
       id: this.props.id,
       starred: this.props.starred,
       labels: this.props.labels,
-      selected: this.props.selected,
+
       read: this.props.read,
       checked: this.props.selected,
     };
+    this.toggleStar = this.toggleStar.bind(this);
+    this.toggleSelectedState = this.toggleSelectedState.bind(this);
+    this.toggleRead = this.toggleRead.bind(this);
   }
 
+  //change state of message to
   toggleRead() {
     let messageId = this.state.id;
-    let isRead = this.state.read;
-    this.props.toggleRead(isRead) ;
+    // let isRead = this.state.read;
+    this.props.toggleRead(messageId) ;
   }
 
   toggleStar() {
    let messageId = this.state.id;
 
-   let newStarState = this.state.starred;
-    console.log('things HAPPEN');
-   this.props.toggleStarState(messageId, newStarState);
+    console.log('things HAPPEN', this.state.starred);
+   this.props.toggleStarState(messageId, 'starred');
   }
 
   toggleSelectedState() {
@@ -43,14 +46,14 @@ class Message extends Component {
     let checkedState = this.props.checked? ' selected' : ' ';
     let starredState = this.props.starred? 'fa-star' : 'fa-star-o';
     return (
-      <div className={`row message  ${readState}  ${checkedState} `}>
+      <div className={`row message  ${readState}  ${checkedState} `} >
         <div className="col-xs-1">
           <div className="row">
             <div className="col-xs-2">
-              <input type="checkbox" defaultChecked={checkedState} onClick={() => this.toggleSelectedState}/>
+              <input type="checkbox" defaultChecked={checkedState} onClick={this.toggleSelectedState}/>
             </div>
             <div className="col-xs-2">
-              <i className={`star fa + ${starredState}`} onClick={() => this.toggleStar()}></i>
+              <i className={`star fa + ${starredState}`} onClick={this.toggleStar}></i>
             </div>
           </div>
         </div>

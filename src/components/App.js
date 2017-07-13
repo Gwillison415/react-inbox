@@ -13,17 +13,48 @@ class App extends Component {
       list,
     };
     this.toggleStarState = this.toggleStarState.bind(this);
-  }
-  toggleRead(messageId, isRead) {
-    let targetedMessage = this.state.list.find(message => message.id === messageId)
-    this.list.targetedMessage.setState({ read: !isRead })
-  }
-  toggleStarState(messageId, newStarState){
-    let targetedMessage = this.state.list.find(message => message.id === messageId)
+    this.toggleCheckState = this.toggleCheckState.bind(this);
 
-    console.log('newStarState', newStarState);
-    this.setState({ starred: newStarState })
   }
+
+  /* -----------------------------------------------------------------------
+                              helper functions
+  ------------------------------------------------------------------------*/
+  targetMessage = (messageId) => { return this.state.list.find(message => message.id === messageId)}
+
+
+
+
+
+
+    //if you're gonna set the new state that requires understanding of old state
+  toggleProperty(message, property){
+    const index = this.state.list.indexOf(message);
+
+    this.setState({
+      list: [
+        ...this.state.list.slice(0, index), // old message up to idx
+        {...message, [property] : !message[property]}, // new message
+        ...this.state.list.slice(index + 1)  // messages past new message
+      ]
+    })
+  }
+
+
+
+  /* -----------------------------------------------------------------------
+                              Message Functions
+  ------------------------------------------------------------------------*/
+  //  change to state of single message
+  toggleRead(messageId) {
+    let targetedMessage = this.targetMessage(messageId);
+    this.list.targetedMessage.setState({ read: !this.state.read })
+  }
+  toggleStarState(messageId, StarState){
+    let targetedMessage = this.targetMessage(messageId);
+    this.toggleProperty(targetedMessage, StarState);
+  }
+
   toggleCheckState(newCheckedState) {
     this.setState({checked: newCheckedState});
   }
@@ -39,7 +70,7 @@ class App extends Component {
               return   <Message key={message.id} labels={message.labels} message={message.message} starred={message.starred} checked={message.checked}
               read={message.read}
               id={message.id}
-              toggleStarState = {this.toggleStarState}/>
+              toggleStarState = {this.toggleStarState} toggleCheckState={this.toggleCheckState}/>
             })}
           </div>
         <Composer />

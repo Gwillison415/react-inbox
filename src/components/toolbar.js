@@ -15,11 +15,18 @@ class Toolbar extends Component {
       read: this.props.read,
       checked: this.props.selected,
     };
+
   }
 
-  messageListStatusFn = () => {
-    let toggledMessages = this.props.list.filter(message => message.checked);
+  //finds messsages where messages have been checked
+  isChecked = () =>  {
+    return this.props.list.filter(message => message.checked);
+  }
 
+
+  messageListStatusFn = () => {
+    let toggledMessages = this.isChecked();
+    console.log(toggledMessages, " CHECKED MESSAGES");
     const unchecked = "fa fa-square-o";
     const someChecked = "fa fa-minus-square-o";
     const checked = "fa fa-check-square-o";
@@ -44,9 +51,11 @@ class Toolbar extends Component {
         </span>
       );
     };
-  // markRead(){
-  //
-  // }
+    //finds all messages where messages are checked
+  markRead = () => {
+    let checkedMessages = this.isChecked();
+    this.props.toggleRead(checkedMessages)
+  }
   render() {
     const read = this.props.read ? " read" : "unread";
     const subject = this.props.subject ? this.props.subject.toString() : "";
@@ -65,7 +74,7 @@ class Toolbar extends Component {
             <i className={this.messageListStatusFn()}></i>
           </button>
 
-          <button className="btn btn-default" >
+          <button className="btn btn-default" onClick={this.markRead}>
             Mark As Read
           </button>
 
