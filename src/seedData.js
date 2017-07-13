@@ -1,9 +1,3 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Toolbar from './toolbar';
-import Message from './message';
-
 const list= [
   {
     id: 1,
@@ -70,20 +64,5 @@ const list= [
     checked: false
     },
 ];
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <Toolbar />
-          {list.map((message) => {
-            return   <Message key={message.id} id={message.id} labels={message.labels} message={message.message} starred={message.starred} checked={message.checked}
-            read={message.read}/>
-          })}
 
-      </div>
-
-    );
-  }
-}
-
-export default App;
+export default list;
