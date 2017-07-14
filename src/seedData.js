@@ -16,12 +16,12 @@ const list= [
     checked: true
     },
   {
-      id: 4,
-      labels: [],
-      message: 'Use the 1080p HTTP feed, then you can parse the cross-platform hard drive!',
-      starred: false,
-      read: false,
-      checked: false
+    id: 4,
+    labels: [],
+    message: 'Use the 1080p HTTP feed, then you can parse the cross-platform hard drive!',
+    starred: false,
+    read: false,
+    checked: false
   },
   {
     id: 3,

@@ -7,13 +7,7 @@ class Toolbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      subject: this.props.subject,
-      id: this.props.id,
-      starred: this.props.starred,
-      labels: this.props.labels,
-      selected: this.props.selected,
-      read: this.props.read,
-      checked: this.props.selected,
+      // this.AddLabel = this.AddLabel.bind(this); //using arrow syntax for this page (to understand both)
     };
 
   }
@@ -23,10 +17,19 @@ class Toolbar extends Component {
     return this.props.list.filter(message => message.checked);
   }
 
+  // readMessagesCount() {
+  //   let readMessagesCount = this.props.list.filter(message => message.read);
+  //   return readMessagesCount.length;
+  // }
+  // selectedMessagesCount() {
+  //   let selectedMessagesCount = this.props.list.filter(message => message.selected);
+  //   return selectedMessagesCount.length;
+  // }
+
 
   messageListStatusFn = () => {
     let toggledMessages = this.isChecked();
-    console.log(toggledMessages, " CHECKED MESSAGES");
+
     const unchecked = "fa fa-square-o";
     const someChecked = "fa fa-minus-square-o";
     const checked = "fa fa-check-square-o";
@@ -40,7 +43,7 @@ class Toolbar extends Component {
       }
     };
 
-  unreadMessages = () => {
+  unreadMessagesCount = () => {
     let count = this.props.list.reduce((total, message) => {
       if (message.read === false) total++;
       return total;
@@ -54,7 +57,24 @@ class Toolbar extends Component {
     //finds all messages where messages are checked
   markRead = () => {
     let checkedMessages = this.isChecked();
-    this.props.toggleRead(checkedMessages)
+
+    this.props.toggleAllRead(checkedMessages, 'read')
+  }
+  markUnread = () => {
+    let checkedMessages = this.isChecked();
+
+    this.props.toggleAllUnread(checkedMessages, 'read')
+  }
+
+  AddLabel = (event) => {
+
+      this.props.addNewLabel(event);
+
+  }
+  removeLabel = (event) => {
+      console.log(event);
+      this.props.removeOldLabel(event);
+
   }
   render() {
     const read = this.props.read ? " read" : "unread";
@@ -67,9 +87,11 @@ class Toolbar extends Component {
       <div className="row toolbar">
         <div className="col-md-12">
           <p className="pull-right">
-            {this.unreadMessages()}
+            {this.unreadMessagesCount()}
           </p>
-            {/* {this.messageListStatusFn} */}
+          <a className="btn btn-danger">
+            <i className="fa fa-plus"></i>
+          </a>
           <button className="btn btn-default">
             <i className={this.messageListStatusFn()}></i>
           </button>
@@ -78,18 +100,18 @@ class Toolbar extends Component {
             Mark As Read
           </button>
 
-          <button className="btn btn-default">
+          <button className="btn btn-default" onClick={this.markUnread}>
             Mark As Unread
           </button>
 
-          <select className="form-control label-select">
+          <select className="form-control label-select" onChange={(event) => {this.AddLabel(event.target.value)}}>
             <option>Apply label</option>
-            <option value="dev">dev</option>
+            <option value="dev" >dev</option>
             <option value="personal">personal</option>
             <option value="gschool">gschool</option>
           </select>
 
-          <select className="form-control label-select">
+          <select className="form-control label-select" onChange={(event) => {this.removeLabel(event.target.value)}}>
             <option>Remove label</option>
             <option value="dev">dev</option>
             <option value="personal">personal</option>

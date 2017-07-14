@@ -24,44 +24,44 @@ class Message extends Component {
   //change state of message to
   toggleRead() {
     let messageId = this.state.id;
-    // let isRead = this.state.read;
-    this.props.toggleRead(messageId) ;
+
+    this.props.toggleRead(messageId);
+
   }
 
   toggleStar() {
    let messageId = this.state.id;
 
-    console.log('things HAPPEN', this.state.starred);
-   this.props.toggleStarState(messageId, 'starred');
+   this.props.toggleStarState(messageId);
   }
 
   toggleSelectedState() {
-    let checkedState = this.state.checked;
-    // let selected = this.state.selected;
-    this.props.toggleCheckState(!checkedState);
+    let messageId = this.state.id;
+    
+    this.props.toggleCheckState(messageId);
   }
 
   render() {
     let readState = this.props.read? 'read' : 'unread';
-    let checkedState = this.props.checked? ' selected' : ' ';
+     let selectedClass = this.props.checked? 'selected' : '';
     let starredState = this.props.starred? 'fa-star' : 'fa-star-o';
     return (
-      <div className={`row message  ${readState}  ${checkedState} `} >
+      <div className={`row message  ${readState}  ${selectedClass} `} >
         <div className="col-xs-1">
           <div className="row">
             <div className="col-xs-2">
-              <input type="checkbox" defaultChecked={checkedState} onClick={this.toggleSelectedState}/>
+              <input type="checkbox" defaultChecked={this.props.checked} onClick={this.toggleSelectedState}/>
             </div>
             <div className="col-xs-2">
               <i className={`star fa + ${starredState}`} onClick={this.toggleStar}></i>
             </div>
           </div>
         </div>
-
-      <div className="col-xs-11">
+{/* onClick={this.toggleRead}  fits below but doesnt target each message*/}
+      <div className="col-xs-11" onClick={this.toggleRead}>
         {this.props.labels.map((label) =>
-        <span key={label} className="label label-warning"> {label} </span>)}
-        <a href="#">
+        <span key={label} className="label label-warning" > {label} </span>)}
+        <a href="#" >
           {this.props.message}
         </a>
       </div>
