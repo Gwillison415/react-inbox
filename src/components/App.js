@@ -135,9 +135,8 @@ class App extends Component {
       selectedMessages.forEach(message => this.deleteObject(message));
   }
 
-  toggleAllCheckState(messages) {
-    let selectedMessages = this.getCheckedMessages(this.state.list)
-    selectedMessages.forEach(message => this.toggleAllProperty(message, 'read'));
+  toggleAllCheckState() {
+    this.state.list.forEach(message => this.toggleAllProperty(message, 'checked'));
   }
   /* -----------------------------------------------------------------------
                               Message Functions
@@ -220,7 +219,7 @@ class App extends Component {
         <div>
           <h2>ToDo's</h2>
           <p><ol>
-            <li>check all button top left</li>
+            
             <li>compose message</li>
 
           </ol></p>

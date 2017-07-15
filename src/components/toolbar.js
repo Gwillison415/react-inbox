@@ -75,10 +75,9 @@ class Toolbar extends Component {
   }
 
   toggleAddSelectedState = () => {
-    let selectedMessages = this.isChecked();
-    this.props.toggleAllCheckState(selectedMessages);
+    this.props.toggleAllCheckState();
   }
-  
+
   render() {
     const read = this.props.read ? " read" : "unread";
     const subject = this.props.subject ? this.props.subject.toString() : "";
