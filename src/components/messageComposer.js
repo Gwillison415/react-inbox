@@ -3,10 +3,14 @@ import React, { Component } from "react";
 class MessageComposer extends Component {
   constructor(props) {
     super(props);
-    this.submitForm = this.submitForm.bind(this);
+    // this.submitForm = this.submitForm.bind(this);
 
   }
-  submitForm(event) {
+
+
+
+
+  submitForm= (event) => {
     event.preventDefault();
     this.props.sendMessage({
       subject : event.target.subject.value,

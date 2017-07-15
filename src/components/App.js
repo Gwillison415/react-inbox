@@ -10,7 +10,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      list : []
+      list : [],
+      composing : false,
     };
     this.toggleStarState = this.toggleStarState.bind(this);
     this.toggleCheckState = this.toggleCheckState.bind(this);
@@ -27,7 +28,11 @@ class App extends Component {
     this.deleteObject = this.deleteObject.bind(this);
     this.toggleAllCheckState =this.toggleAllCheckState.bind(this);
   }
-  // instantiate server data
+  // I'm fully aware that I bind function state in parent class and utilize the implicit bind with ES6  arrow functions in child class components and that this is would violate a company style guide to use one or the other in production code. I'm doing so as to be comfortable with both and practice thinking about them within every contextualize instance of "this"
+
+  /* -----------------------------------------------------------------------
+                              API CAlls
+  ------------------------------------------------------------------------*/
 
   async componentDidMount() {
     const response = await this.makeAPIrequest()
@@ -35,6 +40,37 @@ class App extends Component {
     console.log(json, "JSON");
     this.setState({list: json._embedded.messages})
   }
+
+  async makeAPIrequest(method = 'GET', body = null) {
+  const BASE_URL =  'http://localhost:8181/api/messages'
+   if (body) {body = JSON.stringify(body)}
+   return  await fetch(BASE_URL, {
+     method: method,
+     headers: {
+       'Content-Type': 'application/json',
+       'Accept': 'application/json',
+     },
+     body: body
+   })
+ }
+
+ async sendMessage(messageObj) {
+   const response =  await this.makeAPIrequest( 'POST', {
+     subject: messageObj.subject,
+     body: messageObj.body,
+   })
+   const newMessage =  await response.json()
+
+   const messages = [...this.state.messages, newMessage]
+   this.setState({
+     messages,
+     composing: false,
+   })
+ }
+
+ toggleCompose() {
+   this.setState({composing: !this.state.composing})
+ }
   /* -----------------------------------------------------------------------
                               helper functions
   ------------------------------------------------------------------------*/
@@ -72,8 +108,6 @@ class App extends Component {
       };
     });
   }
-//whenever you're using setState that depends on old state USE A CALLBACK (as above with prevstate)
-    //if you're gonna set the new state that requires understanding of old state
   toggleProperty(message, property){
     const index = this.state.list.indexOf(message);
 
@@ -87,7 +121,7 @@ class App extends Component {
   }
 
   /* -----------------------------------------------------------------------
-                              Toolbar Functions
+  Toolbar Functions
   ------------------------------------------------------------------------*/
 
   // small performance cost to calling setState multiple times
@@ -98,6 +132,8 @@ class App extends Component {
       }
     });
   }
+//whenever you're using setState that depends on old state USE A CALLBACK (as above with prevstate)
+    //if you're gonna set the new state that requires understanding of old state
 
   toggleAllUnread(messages, property) {
     messages.forEach((message) => {
@@ -136,6 +172,7 @@ class App extends Component {
   }
 
   toggleAllCheckState() {
+    console.log(this.state.list.length);
     this.state.list.forEach(message => this.toggleAllProperty(message, 'checked'));
   }
   /* -----------------------------------------------------------------------
@@ -158,40 +195,29 @@ class App extends Component {
     this.toggleProperty(targetedMessage, 'checked');
   }
 
-  /* -----------------------------------------------------------------------
-                              Message Composer Functions
-  ------------------------------------------------------------------------*/
 
-  async makeAPIrequest(method = 'GET', body = null) {
-  const BASE_URL =  'http://localhost:8181/api/messages'
-   if (body) {body = JSON.stringify(body)}
-   return  await fetch(BASE_URL, {
-     method: method,
-     headers: {
-       'Content-Type': 'application/json',
-       'Accept': 'application/json',
-     },
-     body: body
+
+ /* -----------------------------------------------------------------------
+ Message Composer Functions
+ ------------------------------------------------------------------------*/
+
+ async sendMessage(messageObj) {
+   const response =  await this.makeAPIrequest( 'POST', {
+     subject: messageObj.subject,
+     body: messageObj.body,
+   })
+   const newMessage =  await response.json()
+
+   const messages = [...this.state.list, newMessage]
+   this.setState({
+     messages,
+     composing: false,
    })
  }
 
-  async sendMessage(message) {
-    const response =  await this.makeAPIrequest( 'POST', {
-      subject: message.subject,
-      body: message.body,
-    })
-    const newMessage =  await response.json()
-
-    const messages = [...this.state.messages, newMessage]
-    this.setState({
-      messages,
-      composing: false,
-    })
-  }
-
-  toggleCompose() {
-    this.setState({composing: !this.state.composing})
-  }
+ toggleCompose() {
+   this.setState({composing: !this.state.composing})
+ }
 
   render() {
 
@@ -200,11 +226,11 @@ class App extends Component {
         <div className="toolbar">
           <Toolbar key={1} list={this.state.list} toggleRead={this.toggleRead} toggleAllRead={this.toggleAllRead} toggleAllUnread={this.toggleAllUnread} addNewLabel={this.addNewLabel}
           removeOldLabel={this.removeOldLabel}
-          toggleCompose={this.toggleCompose} deleteSelectedMessages={this.deleteSelectedMessages} toggleAllCheckState={this.toggleAllCheckState}/>
+          toggleCompose={this.toggleCompose} deleteSelectedMessages={this.deleteSelectedMessages} toggleAllCheckState={this.toggleAllCheckState} toggleCompose={this.toggleCompose}/>
         </div>
         {this.state.composing ?
-              <MessageComposer sendMessage={ this.sendMessage } /> :
-              null
+              <MessageComposer sendMessage={ this.sendMessage } list={this.state.list} /> :
+               null
           }
           <div>
             {this.state.list.map((message) => {
@@ -212,16 +238,16 @@ class App extends Component {
               read={message.read}
               id={message.id}
               toggleStarState = {this.toggleStarState} toggleCheckState={this.toggleCheckState}
-              toggleRead={this.toggleRead}/>
+              toggleRead={this.toggleRead} />
             })}
           </div>
 
         <div>
-          <h2>ToDo's</h2>
+          <h2>issues</h2>
           <p><ol>
-            
-            <li>compose message</li>
 
+            <li>bulk select doesn't de-select preChecked on a double tap-toggle </li>
+            <li> no messages displayed after send - but on full re-render  -- repaint shouldn't require another get request? </li>
           </ol></p>
         </div>
         <pre>

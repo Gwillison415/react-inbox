@@ -23,6 +23,10 @@ class Toolbar extends Component {
   //   return selectedMessagesCount.length;
   // }
 
+  showComposeMessageForm = () => {
+    this.props.toggleCompose();
+
+  }
 
   messageListStatusFn = () => {
     let toggledMessages = this.isChecked();
@@ -92,7 +96,7 @@ class Toolbar extends Component {
             {this.unreadMessagesCount()}
           </p>
           <a className="btn btn-danger">
-            <i className="fa fa-plus" onClick={this.composeMessage}></i>
+            <i className="fa fa-plus" onClick={this.showComposeMessageForm}></i>
           </a>
           <button className="btn btn-default">
             <i className={this.messageListStatusFn()} onClick={this.toggleAddSelectedState}></i>
