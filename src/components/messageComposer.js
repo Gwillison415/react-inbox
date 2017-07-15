@@ -1,15 +1,24 @@
 import React, { Component } from "react";
 
-class Composer extends Component {
+class MessageComposer extends Component {
   constructor(props) {
     super(props);
-    // this.state = ;
+    this.submitForm = this.submitForm.bind(this);
+
+  }
+  submitForm(event) {
+    event.preventDefault();
+    this.props.sendMessage({
+      subject : event.target.subject.value,
+      body : event.target.value
+    })
   }
   render() {
-    const message = this.props.message ? "Compose Message" : "";
+    const message = this.props.subject ? "Compose Message" : "";
+
 
     return (
-      <form className="form-horizontal well">
+      <form className="form-horizontal well" onSubmit={ this.submitForm }>
         <div className="form-group">
           <div className="col-sm-8 col-sm-offset-2">
             <h4>
@@ -49,4 +58,4 @@ class Composer extends Component {
   }
 }
 
-export default Composer;
+export default MessageComposer;

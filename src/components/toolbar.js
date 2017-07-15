@@ -6,9 +6,9 @@ import React, { Component } from 'react';
 class Toolbar extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // this.AddLabel = this.AddLabel.bind(this); //using arrow syntax for this page (to understand both)
-    };
+    // this.state = {
+    //   this.AddLabel = this.AddLabel.bind(this); //using arrow syntax for this page (to understand both)
+    // };
 
   }
 
@@ -57,24 +57,24 @@ class Toolbar extends Component {
     //finds all messages where messages are checked
   markRead = () => {
     let checkedMessages = this.isChecked();
-
     this.props.toggleAllRead(checkedMessages, 'read')
   }
   markUnread = () => {
     let checkedMessages = this.isChecked();
-
     this.props.toggleAllUnread(checkedMessages, 'read')
   }
 
   AddLabel = (event) => {
-
       this.props.addNewLabel(event);
-
   }
   removeLabel = (event) => {
       console.log(event);
       this.props.removeOldLabel(event);
+  }
 
+  deleteSelected = () => {
+    let selectedMessages = this.isChecked();
+    this.props.deleteSelectedMessages(selectedMessages)
   }
   render() {
     const read = this.props.read ? " read" : "unread";
@@ -119,7 +119,7 @@ class Toolbar extends Component {
           </select>
 
           <button className="btn btn-default">
-            <i className="fa fa-trash-o"></i>
+            <i className="fa fa-trash-o" onClick={this.deleteSelected}></i>
           </button>
         </div>
       </div>
