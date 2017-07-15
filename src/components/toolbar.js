@@ -6,9 +6,6 @@ import React, { Component } from 'react';
 class Toolbar extends Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   this.AddLabel = this.AddLabel.bind(this); //using arrow syntax for this page (to understand both)
-    // };
 
   }
 
@@ -76,6 +73,12 @@ class Toolbar extends Component {
     let selectedMessages = this.isChecked();
     this.props.deleteSelectedMessages(selectedMessages)
   }
+
+  toggleAddSelectedState = () => {
+    let selectedMessages = this.isChecked();
+    this.props.toggleAllCheckState(selectedMessages);
+  }
+  
   render() {
     const read = this.props.read ? " read" : "unread";
     const subject = this.props.subject ? this.props.subject.toString() : "";
@@ -90,10 +93,10 @@ class Toolbar extends Component {
             {this.unreadMessagesCount()}
           </p>
           <a className="btn btn-danger">
-            <i className="fa fa-plus"></i>
+            <i className="fa fa-plus" onClick={this.composeMessage}></i>
           </a>
           <button className="btn btn-default">
-            <i className={this.messageListStatusFn()}></i>
+            <i className={this.messageListStatusFn()} onClick={this.toggleAddSelectedState}></i>
           </button>
 
           <button className="btn btn-default" onClick={this.markRead}>

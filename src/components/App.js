@@ -25,6 +25,7 @@ class App extends Component {
     this.sendMessage = this.sendMessage.bind(this);
     this.deleteSelectedMessages = this.deleteSelectedMessages.bind(this);
     this.deleteObject = this.deleteObject.bind(this);
+    this.toggleAllCheckState =this.toggleAllCheckState.bind(this);
   }
   // instantiate server data
 
@@ -133,6 +134,11 @@ class App extends Component {
   deleteSelectedMessages(selectedMessages) {
       selectedMessages.forEach(message => this.deleteObject(message));
   }
+
+  toggleAllCheckState(messages) {
+    let selectedMessages = this.getCheckedMessages(this.state.list)
+    selectedMessages.forEach(message => this.toggleAllProperty(message, 'read'));
+  }
   /* -----------------------------------------------------------------------
                               Message Functions
   ------------------------------------------------------------------------*/
@@ -187,6 +193,7 @@ class App extends Component {
   toggleCompose() {
     this.setState({composing: !this.state.composing})
   }
+
   render() {
 
     return (
@@ -194,7 +201,7 @@ class App extends Component {
         <div className="toolbar">
           <Toolbar key={1} list={this.state.list} toggleRead={this.toggleRead} toggleAllRead={this.toggleAllRead} toggleAllUnread={this.toggleAllUnread} addNewLabel={this.addNewLabel}
           removeOldLabel={this.removeOldLabel}
-          toggleCompose={this.toggleCompose} deleteSelectedMessages={this.deleteSelectedMessages}/>
+          toggleCompose={this.toggleCompose} deleteSelectedMessages={this.deleteSelectedMessages} toggleAllCheckState={this.toggleAllCheckState}/>
         </div>
         {this.state.composing ?
               <MessageComposer sendMessage={ this.sendMessage } /> :
@@ -215,7 +222,7 @@ class App extends Component {
           <p><ol>
             <li>check all button top left</li>
             <li>compose message</li>
-            <li>delete</li>
+
           </ol></p>
         </div>
         <pre>
