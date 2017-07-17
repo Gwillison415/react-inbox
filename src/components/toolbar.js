@@ -24,8 +24,8 @@ class Toolbar extends Component {
   // }
 
   showComposeMessageForm = () => {
+    console.log('compose toggeled from toolbar');
     this.props.toggleCompose();
-
   }
 
   messageListStatusFn = () => {
@@ -70,7 +70,7 @@ class Toolbar extends Component {
       this.props.addNewLabel(event);
   }
   removeLabel = (event) => {
-      console.log(event);
+      // console.log(event);
       this.props.removeOldLabel(event);
   }
 

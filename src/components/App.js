@@ -237,6 +237,7 @@ class App extends Component {
 
 
  toggleCompose() {
+   console.log(this.state.composing);
    this.setState({composing: !this.state.composing})
  }
 
@@ -248,7 +249,14 @@ class App extends Component {
           <Toolbar key={1} list={this.state.list} toggleRead={this.toggleRead} toggleAllRead={this.toggleAllRead} toggleAllUnread={this.toggleAllUnread} addNewLabel={this.addNewLabel}
           removeOldLabel={this.removeOldLabel}
           toggleCompose={this.toggleCompose} deleteSelectedMessages={this.deleteSelectedMessages} toggleAllCheckState={this.toggleAllCheckState} toggleCompose={this.toggleCompose}/>
-         
+        </div>
+        <div>
+          {this.state.composing ?
+            <MessageComposer sendMessage={ this.sendMessage } list={this.state.list} /> :
+             null}
+
+        </div>
+        <div>
             {this.state.list.map((message) => {
               return   <Message key={message.id} labels={message.labels} subject={message.subject} starred={message.starred} checked={message.checked}
               read={message.read}
