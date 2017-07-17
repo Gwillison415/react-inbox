@@ -208,12 +208,33 @@ class App extends Component {
    })
    const newMessage =  await response.json()
 
-   const messages = [...this.state.list, newMessage]
-   this.setState({
-     messages,
+   this.setState(prevState => {
+     return {
+       list : [
+       ...prevState.list,
+       newMessage
+     ],
      composing: false,
-   })
+   }})
  }
+
+//mangled code
+// async sendMessage(messageObj) {
+//   const response =  await this.makeAPIrequest( 'POST', {
+//     subject: messageObj.subject,
+//     body: messageObj.body,
+//   })
+//   const newMessage =  await response.json()
+//
+//
+//   this.setState(prevState => {
+//     return {
+//       list = [...prevState.list, newMessage],
+//       composing: false,
+//     }
+//   })
+// }
+
 
  toggleCompose() {
    this.setState({composing: !this.state.composing})
@@ -227,12 +248,7 @@ class App extends Component {
           <Toolbar key={1} list={this.state.list} toggleRead={this.toggleRead} toggleAllRead={this.toggleAllRead} toggleAllUnread={this.toggleAllUnread} addNewLabel={this.addNewLabel}
           removeOldLabel={this.removeOldLabel}
           toggleCompose={this.toggleCompose} deleteSelectedMessages={this.deleteSelectedMessages} toggleAllCheckState={this.toggleAllCheckState} toggleCompose={this.toggleCompose}/>
-        </div>
-        {this.state.composing ?
-              <MessageComposer sendMessage={ this.sendMessage } list={this.state.list} /> :
-               null
-          }
-          <div>
+         
             {this.state.list.map((message) => {
               return   <Message key={message.id} labels={message.labels} subject={message.subject} starred={message.starred} checked={message.checked}
               read={message.read}
@@ -247,7 +263,16 @@ class App extends Component {
           <p><ol>
 
             <li>bulk select doesn't de-select preChecked on a double tap-toggle </li>
-            <li> no messages displayed after send - but on full re-render  -- repaint shouldn't require another get request? </li>
+            <ul>
+              <li>onCheck then bulk check messages all get checked</li>
+              <li>the bulk select again selects  all but preselected messages</li>
+              <li>all good on re render - probably must pass callback to set state on
+              <ol>
+                <li>bulk select</li>
+                <li>possibly something else</li>
+              </ol></li>
+            </ul>
+            <li> RESOLVED - no messages displayed after send - resolved with immutable callback passed to setState </li>
           </ol></p>
         </div>
         <pre>

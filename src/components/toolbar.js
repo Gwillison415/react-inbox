@@ -58,6 +58,7 @@ class Toolbar extends Component {
     //finds all messages where messages are checked
   markRead = () => {
     let checkedMessages = this.isChecked();
+
     this.props.toggleAllRead(checkedMessages, 'read')
   }
   markUnread = () => {
