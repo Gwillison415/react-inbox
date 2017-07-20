@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
-
+import {
+  removeOldLabel,
+} from '../actions/toolbarActions';
 
 
 class Toolbar extends Component {
