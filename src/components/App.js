@@ -245,26 +245,35 @@ class App extends Component {
 
     return (
       <div>
-        <div className="toolbar">
-          <Toolbar key={1} list={this.state.list} toggleRead={this.toggleRead} toggleAllRead={this.toggleAllRead} toggleAllUnread={this.toggleAllUnread} addNewLabel={this.addNewLabel}
-          removeOldLabel={this.removeOldLabel}
-          toggleCompose={this.toggleCompose} deleteSelectedMessages={this.deleteSelectedMessages} toggleAllCheckState={this.toggleAllCheckState} toggleCompose={this.toggleCompose}/>
-        </div>
-        <div>
-          {this.state.composing ?
-            <MessageComposer sendMessage={ this.sendMessage } list={this.state.list} /> :
-             null}
-
-        </div>
-        <div>
-            {this.state.list.map((message) => {
-              return   <Message key={message.id} labels={message.labels} subject={message.subject} starred={message.starred} checked={message.checked}
-              read={message.read}
-              id={message.id}
-              toggleStarState = {this.toggleStarState} toggleCheckState={this.toggleCheckState}
-              toggleRead={this.toggleRead} />
-            })}
+        <div className="App">
+          <div className="App-header">
+            <img src={logo} className="App-logo" alt="logo" />
+            <h2>Welcome to React</h2>
           </div>
+          <p className="App-intro">
+            To get started, edit <code>src/App.js</code> and save to reload.
+          </p>
+      </div>
+      <div className="toolbar">
+        <Toolbar key={1} list={this.state.list} toggleRead={this.toggleRead} toggleAllRead={this.toggleAllRead} toggleAllUnread={this.toggleAllUnread} addNewLabel={this.addNewLabel}
+        removeOldLabel={this.removeOldLabel}
+        toggleCompose={this.toggleCompose} deleteSelectedMessages={this.deleteSelectedMessages} toggleAllCheckState={this.toggleAllCheckState} toggleCompose={this.toggleCompose}/>
+      </div>
+      <div>
+        {this.state.composing ?
+          <MessageComposer sendMessage={ this.sendMessage } list={this.state.list} /> :
+           null}
+
+      </div>
+      <div>
+          {this.state.list.map((message) => {
+            return   <Message key={message.id} labels={message.labels} subject={message.subject} starred={message.starred} checked={message.checked}
+            read={message.read}
+            id={message.id}
+            toggleStarState = {this.toggleStarState} toggleCheckState={this.toggleCheckState}
+            toggleRead={this.toggleRead} />
+          })}
+        </div>
 
         <div>
           <h2>issues</h2>

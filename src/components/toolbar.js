@@ -1,140 +1,84 @@
-import React, { Component } from 'react';
+import React from 'react'
 
+const Toolbar = ({
+  messages,
+  toggleSelectAll,
+  toggleCompose,
+  markAsRead,
+  markAsUnread,
+  applyLabel,
+  removeLabel,
+  deleteMessages,
+}) => {
+  const unreadCount = messages.filter(message => !message.read).length
+  const selectedCount = messages.filter(message => message.selected).length
+  let selectAllClass
 
-
-
-class Toolbar extends Component {
-  constructor(props) {
-    super(props);
-
+  switch(selectedCount) {
+    case 0:
+      selectAllClass = 'fa-square-o'
+      break;
+    case messages.length:
+      selectAllClass = 'fa-check-square-o'
+      break;
+    default:
+      selectAllClass = 'fa-minus-square-o'
   }
 
-  //finds messsages where messages have been checked
-  isChecked = () =>  {
-    return this.props.list.filter(message => message.checked);
-  }
+  return (
+    <div className="row toolbar">
+      <div className="col-xs-12">
+        <p className="pull-right">
+          <span className="badge badge">
+            {unreadCount}
+          </span>
+          unread {unreadCount === 1 ? 'message' : 'messages'}
+        </p>
 
-  // readMessagesCount() {
-  //   let readMessagesCount = this.props.list.filter(message => message.read);
-  //   return readMessagesCount.length;
-  // }
-  // selectedMessagesCount() {
-  //   let selectedMessagesCount = this.props.list.filter(message => message.selected);
-  //   return selectedMessagesCount.length;
-  // }
+        <button className="btn btn-danger" onClick={() => toggleCompose(messages)}>
+          <i className={`fa fa-plus`}></i>
+        </button>
 
-  showComposeMessageForm = () => {
-    console.log('compose toggeled from toolbar');
-    this.props.toggleCompose();
-  }
+        <button className="btn btn-default" onClick={() => toggleSelectAll(messages)}>
+          <i className={`fa ${selectAllClass}`}></i>
+        </button>
 
-  messageListStatusFn = () => {
-    let toggledMessages = this.isChecked();
+        <button className="btn btn-default" onClick={() => markAsRead(messages)} disabled={selectedCount === 0}>
+          Mark As Read
+        </button>
 
-    const unchecked = "fa fa-square-o";
-    const someChecked = "fa fa-minus-square-o";
-    const checked = "fa fa-check-square-o";
+        <button className="btn btn-default" onClick={() => markAsUnread(messages)} disabled={selectedCount === 0}>
+          Mark As Unread
+        </button>
 
-      if (toggledMessages.length === this.props.list.length) {
-        return checked;
-      } else if (toggledMessages.length > 0) {
-        return someChecked;
-      } else if (toggledMessages.length === 0) {
-        return unchecked;
-      }
-    };
+        <select
+          className="form-control label-select"
+          disabled={selectedCount === 0}
+          onChange={(e) => {applyLabel(messages, e.target.value); e.target.selectedIndex = 0}}
+          >
+          <option>Apply label</option>
+          <option value="dev">dev</option>
+          <option value="personal">personal</option>
+          <option value="gschool">gschool</option>
+        </select>
 
-  unreadMessagesCount = () => {
-    let count = this.props.list.reduce((total, message) => {
-      if (message.read === false) total++;
-      return total;
-    }, 0);
-    return (
-        <span className="badge badge">
-          {count} unread messages
-        </span>
-      );
-    };
-    //finds all messages where messages are checked
-  markRead = () => {
-    let checkedMessages = this.isChecked();
+        <select
+          className="form-control label-select"
+          disabled={selectedCount === 0}
+          onChange={(e) => {removeLabel(messages, e.target.value); e.target.selectedIndex = 0}}
+          >
+          <option>Remove label</option>
+          <option value="dev">dev</option>
+          <option value="personal">personal</option>
+          <option value="gschool">gschool</option>
+        </select>
 
-    this.props.toggleAllRead(checkedMessages, 'read')
-  }
-  markUnread = () => {
-    let checkedMessages = this.isChecked();
-    this.props.toggleAllUnread(checkedMessages, 'read')
-  }
-
-  AddLabel = (event) => {
-      this.props.addNewLabel(event);
-  }
-  removeLabel = (event) => {
-      // console.log(event);
-      this.props.removeOldLabel(event);
-  }
-
-  deleteSelected = () => {
-    let selectedMessages = this.isChecked();
-    this.props.deleteSelectedMessages(selectedMessages)
-  }
-
-  toggleAddSelectedState = () => {
-    this.props.toggleAllCheckState();
-  }
-
-  render() {
-    const read = this.props.read ? " read" : "unread";
-    const subject = this.props.subject ? this.props.subject.toString() : "";
-    const starred = this.props.starred ? "fa fa-star" : "fa fa-star-o";
-    const selected = this.props.selected ? "selected" : "";
-    const checked = this.props.selected ? "checked" : "";
-
-    return (
-      <div className="row toolbar">
-        <div className="col-md-12">
-          <p className="pull-right">
-            {this.unreadMessagesCount()}
-          </p>
-          <a className="btn btn-danger">
-            <i className="fa fa-plus" onClick={this.showComposeMessageForm}></i>
-          </a>
-          <button className="btn btn-default">
-            <i className={this.messageListStatusFn()} onClick={this.toggleAddSelectedState}></i>
-          </button>
-
-          <button className="btn btn-default" onClick={this.markRead}>
-            Mark As Read
-          </button>
-
-          <button className="btn btn-default" onClick={this.markUnread}>
-            Mark As Unread
-          </button>
-
-          <select className="form-control label-select" onChange={(event) => {this.AddLabel(event.target.value)}}>
-            <option>Apply label</option>
-            <option value="dev" >dev</option>
-            <option value="personal">personal</option>
-            <option value="gschool">gschool</option>
-          </select>
-
-          <select className="form-control label-select" onChange={(event) => {this.removeLabel(event.target.value)}}>
-            <option>Remove label</option>
-            <option value="dev">dev</option>
-            <option value="personal">personal</option>
-            <option value="gschool">gschool</option>
-          </select>
-
-          <button className="btn btn-default">
-            <i className="fa fa-trash-o" onClick={this.deleteSelected}></i>
-          </button>
-        </div>
+        <button className="btn btn-default" onClick={() => deleteMessages(messages)} disabled={selectedCount === 0}>
+          <i className="fa fa-trash-o"></i>
+        </button>
       </div>
-    );
-  }
-
+    </div>
+  )
 }
 
-
-
-export default Toolbar;
+export default Toolbar
