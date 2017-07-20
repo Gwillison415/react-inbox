@@ -244,7 +244,7 @@ class App extends Component {
   render() {
 
     return (
-      <div>
+      <div className="App">
         <div className="toolbar">
           <Toolbar key={1} list={this.state.list} toggleRead={this.toggleRead} toggleAllRead={this.toggleAllRead} toggleAllUnread={this.toggleAllUnread} addNewLabel={this.addNewLabel}
           removeOldLabel={this.removeOldLabel}
