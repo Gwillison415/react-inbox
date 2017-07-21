@@ -6,21 +6,24 @@ import Message from './message';
 import MessageComposer from './messageComposer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-//
-// import {
-//   getAllMessages,
-//   sendMessage,
-//   toggleStarState,
-//
-// } from '../actions/messsageActions'
+import {initialState} from '../reducers/initialState';
+
+
+import {
+  getAllMessages,
+  sendMessage,
+  toggleStarState,
+
+} from '../actions/messageActions.js';
 
 class App extends Component {
 /* -----------------------------------------------------------------------
                               API CAlls
   ------------------------------------------------------------------------*/
 
-  async componentDidMount() {
-    // await getAllMessages();
+   componentDidMount(){
+   console.log(this.props.getAllMessages.toString());
+    this.props.getAllMessages();
 
   }
 
@@ -194,19 +197,24 @@ class App extends Component {
 
     return (
       <div>
-        <div className="toolbar">
-          <Toolbar key={1} list={this.state.list} toggleRead={this.toggleRead} toggleAllRead={this.toggleAllRead} toggleAllUnread={this.toggleAllUnread} addNewLabel={this.addNewLabel}
-          removeOldLabel={this.removeOldLabel}
-          toggleCompose={this.toggleCompose} deleteSelectedMessages={this.deleteSelectedMessages} toggleAllCheckState={this.toggleAllCheckState} toggleCompose={this.toggleCompose}/>
-        </div>
+        {/* <div className="toolbar">
+          <Toolbar key={1} messages={this.props.messages}
+            markAsRead={this.props.markAsRead}
+            markAsUnread={this.props.markAsUnread}
+            deleteMessages={this.props.deleteMessages}
+            toggleSelectAll={this.props.toggleSelectAll}
+            applyLabel={this.props.applyLabel}
+            removeLabel={this.props.removeLabel}
+            toggleCompose={this.props.toggleCompose}/>
+        </div> */}
         <div>
-          {this.state.composing ?
-            <MessageComposer sendMessage={ this.onSendMessage } list={this.state.list} /> :
+          {this.props.composing ?
+            <MessageComposer sendMessage={ this.onSendMessage } list={this.props.messsages} /> :
              null}
 
         </div>
         <div>
-            {this.state.list.map((message) => {
+            {this.props.messages.map((message) => {
               return   <Message key={message.id} labels={message.labels} subject={message.subject} starred={message.starred} checked={message.checked}
               read={message.read}
               id={message.id}
@@ -229,16 +237,22 @@ class App extends Component {
     );
   }
 }
-// const mapStateToProps = state => ({
-//   composing: state.messages.composing,
-//   messages: state.messages.messages,
-//   fetchingMessages: state.fetchingMessages,
-// })
-//
-// const mapDispatchToProps = dispatch => bindActionCreators({
-//   getAllMessages,
-//   onSendMessage(messageObj) {sendMessage},
-// }, dispatch)
+
+
+const mapStateToProps = state => {
+  // console.log(state);
+  // composing : state.messages.composing,
+  return {
+    messages : state.messages.state,
+  }
+
+}
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  getAllMessages,
+  sendMessage,
+  toggleStarState,
+}, dispatch)
 
 export default connect(
   mapStateToProps,

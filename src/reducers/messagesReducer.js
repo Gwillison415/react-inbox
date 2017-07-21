@@ -1,21 +1,26 @@
 import {applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
-import { toggleProperty } from './index';
+import { toggleProperty } from '../actions/index';
+import {initialState} from '../reducers/initialState';
 import {
     STAR_MESSAGE,
     MESSAGES_REQUEST_STARTED,
     MESSAGES_RECEIVED,
-    REMOVE_LABEL_FROM_MESSAGE
 
-} from '../index'
 
-const initialState = {
-  messages: [],
-  fetchingMessages: true,
-  creatingMessage: false,
-  composing: false,
-};
+} from '../actions/messageActions'
+
+import {
+  REMOVE_LABEL_FROM_MESSAGE,
+
+} from '../actions/toolbarActions';
+// const initialState = {
+//   messages: [],
+//   fetchingMessages: true,
+//   creatingMessage: false,
+//   composing: false,
+// };
 
 
 
@@ -24,7 +29,7 @@ export const messagesReducer = (state = initialState, action) => {
     case MESSAGES_RECEIVED: return {
       ...state,
       messages: action.messages,
-      fetchingMessages: false,
+      // fetchingMessages: false,
     }
     case MESSAGES_REQUEST_STARTED :
     return {
@@ -52,6 +57,10 @@ export const messagesReducer = (state = initialState, action) => {
     return {
       ...state,
       messages: toggleProperty(state.messages, action.message, 'starred')
+    }
+    default:
+    return {
+      state,
     }
   }
 }
