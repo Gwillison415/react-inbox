@@ -31,8 +31,8 @@ const store = createStore(
   rootReducer,
   initialState,
   // CAUSES Actions must be plain objects. Use custom middleware for async actions. TODO find out if my code is isomorphic??
-  // typeof window !== 'undefined' &&  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
   applyMiddleware(...middleware),
+  typeof window !== 'undefined' &&  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 )
 
 // store.subscribe(() => {

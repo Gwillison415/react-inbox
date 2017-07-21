@@ -22,7 +22,7 @@ class App extends Component {
   ------------------------------------------------------------------------*/
 
    componentDidMount(){
-   console.log(this.props.getAllMessages.toString());
+  //  console.log(this.props.getAllMessages.toString());
     this.props.getAllMessages();
 
   }
@@ -230,7 +230,7 @@ class App extends Component {
           </ol>
         </div>
         <pre>
-          {JSON.stringify(this.state, null, 2)};
+          {JSON.stringify(this.props.store, null, 2)};
         </pre>
       </div>
 
@@ -240,10 +240,10 @@ class App extends Component {
 
 
 const mapStateToProps = state => {
-  // console.log(state);
-  // composing : state.messages.composing,
   return {
+    store : state,
     messages : state.messages.state,
+    composing : state.composing,
   }
 
 }
