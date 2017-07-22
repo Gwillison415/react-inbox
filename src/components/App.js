@@ -194,10 +194,12 @@ class App extends Component {
  }
 
   render() {
-
+    if (this.props.messages === undefined) {
+      return <div>Loading</div>
+    }
     return (
       <div>
-        {/* <div className="toolbar">
+        <div className="Toolbar">
           <Toolbar key={1} messages={this.props.messages}
             markAsRead={this.props.markAsRead}
             markAsUnread={this.props.markAsUnread}
@@ -206,7 +208,7 @@ class App extends Component {
             applyLabel={this.props.applyLabel}
             removeLabel={this.props.removeLabel}
             toggleCompose={this.props.toggleCompose}/>
-        </div> */}
+        </div>
         <div>
           {this.props.composing ?
             <MessageComposer sendMessage={ this.onSendMessage } list={this.props.messsages} /> :
@@ -214,6 +216,7 @@ class App extends Component {
 
         </div>
         <div>
+          {console.log("all props from app.js", this.props)}
             {this.props.messages.map((message) => {
               return   <Message key={message.id} labels={message.labels} subject={message.subject} starred={message.starred} checked={message.checked}
               read={message.read}
@@ -237,12 +240,14 @@ class App extends Component {
     );
   }
 }
-
+// probably need to map state.messages.messagesByID to the object i've created to enforce the contract I have established
 
 const mapStateToProps = state => {
+  console.log('mpstp', state);
   return {
     store : state,
-    messages : state.messages.state,
+    messagesObj : state.messages,
+    messages: state.messages.messages,
     composing : state.composing,
   }
 

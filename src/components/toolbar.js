@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
+import {messageListStatusFn, removeOldLabel, unreadMessagesCount, AddLabel} from '../actions/toolbarActions';
 
-import {
-  removeOldLabel,
-} from '../actions/toolbarActions';
-
+import {  bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 class Toolbar extends Component {
-  constructor(props) {
-    super(props);
-
-  }
-
+  // constructor(props) {
+  //   super(props);
+  //
+  // }
+  // console.log(this.props);
   //finds messsages where messages have been checked
-  isChecked = () =>  {
-    return this.props.list.filter(message => message.checked);
-  }
+
 
   // readMessagesCount() {
   //   let readMessagesCount = this.props.list.filter(message => message.read);
@@ -25,65 +22,41 @@ class Toolbar extends Component {
   //   return selectedMessagesCount.length;
   // }
 
-  showComposeMessageForm = () => {
-    console.log('compose toggeled from toolbar');
-    this.props.toggleCompose();
-  }
+  // showComposeMessageForm = () => {
+  //   console.log('compose toggeled from toolbar');
+  //   this.props.toggleCompose();
+  // }
 
-  messageListStatusFn = () => {
-    let toggledMessages = this.isChecked();
 
-    const unchecked = "fa fa-square-o";
-    const someChecked = "fa fa-minus-square-o";
-    const checked = "fa fa-check-square-o";
 
-      if (toggledMessages.length === this.props.list.length) {
-        return checked;
-      } else if (toggledMessages.length > 0) {
-        return someChecked;
-      } else if (toggledMessages.length === 0) {
-        return unchecked;
-      }
-    };
 
-  unreadMessagesCount = () => {
-    let count = this.props.list.reduce((total, message) => {
-      if (message.read === false) total++;
-      return total;
-    }, 0);
-    return (
-        <span className="badge badge">
-          {count} unread messages
-        </span>
-      );
-    };
     //finds all messages where messages are checked
-  markRead = () => {
-    let checkedMessages = this.isChecked();
-
-    this.props.toggleAllRead(checkedMessages, 'read')
-  }
-  markUnread = () => {
-    let checkedMessages = this.isChecked();
-    this.props.toggleAllUnread(checkedMessages, 'read')
-  }
-
-  AddLabel = (event) => {
-      this.props.addNewLabel(event);
-  }
-  removeLabel = (event) => {
-      // console.log(event);
-      this.props.removeOldLabel(event);
-  }
-
-  deleteSelected = () => {
-    let selectedMessages = this.isChecked();
-    this.props.deleteSelectedMessages(selectedMessages)
-  }
-
-  toggleAddSelectedState = () => {
-    this.props.toggleAllCheckState();
-  }
+  // markRead = () => {
+  //   let checkedMessages = this.isChecked();
+  //
+  //   this.props.toggleAllRead(checkedMessages, 'read')
+  // }
+  // markUnread = () => {
+  //   let checkedMessages = this.isChecked();
+  //   this.props.toggleAllUnread(checkedMessages, 'read')
+  // }
+  //
+  // AddLabel = (event) => {
+  //     this.props.addNewLabel(event);
+  // }
+  // removeLabel = (event) => {
+  //     // console.log(event);
+  //     this.props.removeOldLabel(event);
+  // }
+  //
+  // deleteSelected = () => {
+  //   let selectedMessages = this.isChecked();
+  //   this.props.deleteSelectedMessages(selectedMessages)
+  // }
+  //
+  // toggleAddSelectedState = () => {
+  //   this.props.toggleAllCheckState();
+  // }
 
   render() {
     const read = this.props.read ? " read" : "unread";
@@ -96,13 +69,13 @@ class Toolbar extends Component {
       <div className="row toolbar">
         <div className="col-md-12">
           <p className="pull-right">
-            {this.unreadMessagesCount()}
+            {this.props.unreadMessagesCount}
           </p>
           <a className="btn btn-danger">
-            <i className="fa fa-plus" onClick={this.showComposeMessageForm}></i>
+            <i className="fa fa-plus" onClick={this.props.showComposeMessageForm}></i>
           </a>
           <button className="btn btn-default">
-            <i className={this.messageListStatusFn()} onClick={this.toggleAddSelectedState}></i>
+            <i className={this.messageListStatusFn} onClick={this.toggleAddSelectedState}></i>
           </button>
 
           <button className="btn btn-default" onClick={this.markRead}>
@@ -113,14 +86,14 @@ class Toolbar extends Component {
             Mark As Unread
           </button>
 
-          <select className="form-control label-select" onChange={(event) => {this.AddLabel(event.target.value)}}>
+          <select className="form-control label-select" onChange={(event) => {this.props.AddLabel(event.target.value)}}>
             <option>Apply label</option>
             <option value="dev" >dev</option>
             <option value="personal">personal</option>
             <option value="gschool">gschool</option>
           </select>
 
-          <select className="form-control label-select" onChange={(event) => {this.removeLabel(event.target.value)}}>
+          <select className="form-control label-select" onChange={(event) => {this.props.removeOldLabel(event.target.value)}}>
             <option>Remove label</option>
             <option value="dev">dev</option>
             <option value="personal">personal</option>
@@ -136,7 +109,19 @@ class Toolbar extends Component {
   }
 
 }
+const mapStateToProps = state => {
+  return {
+    messages : state.messages,
+    composing : state.composing,
+  }
+}
+const mapDispatchToProps = dispatch => bindActionCreators({
+  messageListStatusFn,
+  removeOldLabel,
+  AddLabel,
+}, dispatch)
 
-
-
-export default Toolbar;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Toolbar);

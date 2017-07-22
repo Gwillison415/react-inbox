@@ -1,4 +1,5 @@
 import fetch from 'unfetch';
+
 import {
   toggleProperty,
 } from './index';
@@ -8,11 +9,11 @@ export const MESSAGES_REQUEST_STARTED = "MESSAGES_REQUEST_STARTED";
 export const MESSAGES_RECEIVED = 'MESSAGES_RECEIVED';
 
 export const getAllMessages = () => {
-  console.log('before dispatch');
+  // console.log('before dispatch');
   return async (dispatch) => {
     dispatch({ type: MESSAGES_REQUEST_STARTED })
     const response = await makeAPIrequest();
-    console.log('typeof response', response);
+    // console.log('typeof response', response);
     const json = await response.json()
     dispatch({
       type: MESSAGES_RECEIVED,
@@ -82,17 +83,38 @@ export const sendMessage = (messageObj) => {
 
 
 export const STAR_MESSAGE = 'STAR_MESSAGE';
-export const toggleStarState = (message) => {
-  return async (dispatch) => {
-    await updateMessagesList({
-      "messageIds": [ message.id ],
-      "command": "star",
-      "star": message.starred
-    })
+export const toggleStarState = (id) => {
+  console.log('STAR_MESSAGE action happens in messageActions', id);
+  return  (dispatch) => {
+    // await updateMessagesList({
+    //   "messageIds": [ message.id ],
+    //   "command": "star",
+    //   "star": message.starred
+    // })
 
-    dispatch({
+     return dispatch({
       type: STAR_MESSAGE,
-      message: message,
+      messageId: id,
+    })
+  }
+}
+export const TOGGLE_SELECT = "TOGGLE_SELECT";
+export const toggleSelectedState = (id) => {
+  console.log("TOGGLE_SELECT action happens, id = ", id);
+  return (dispatch) => {
+    return dispatch({
+      type : TOGGLE_SELECT,
+      messageId: id
+    })
+  }
+}
+export const TOGGLE_READ = "TOGGLE_READ";
+export const toggleRead = (id) => {
+  return dispatch => {
+    return dispatch({
+      type: TOGGLE_READ,
+      messageId : id,
+
     })
   }
 }
@@ -131,5 +153,8 @@ const BASE_URL =  'http://localhost:8181/api/messages';
 
 const updateMessagesList = (actionPayload) => {
   makeAPIrequest('POST', actionPayload)
-    .then(resolvedMessages => resolvedMessages)
+    .then(resolvedMessages => {
+      console.log("resolvedMessages in actions", resolvedMessages);
+      resolvedMessages
+    })
 }

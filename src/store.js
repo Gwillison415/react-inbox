@@ -19,7 +19,7 @@ const error = (store) => (next) => action => {
   }
   next(action);
 }
-console.log(initialState);
+console.log('initialState', initialState);
 
 const middleware = [
   thunk,
@@ -35,9 +35,9 @@ const store = createStore(
   typeof window !== 'undefined' &&  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 )
 
-// store.subscribe(() => {
-//   console.log('store changed', store.getstate());
-// })
+store.subscribe(() => {
+  console.log('store changed', store.getState());
+})
 
 export default store;
 

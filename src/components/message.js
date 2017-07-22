@@ -1,5 +1,7 @@
  import React, { Component } from 'react';
-import { toggleStarState } from '../actions/messageActions.js';
+import { toggleStarState, toggleRead, toggleSelectedState } from '../actions/messageActions.js';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 // <div className={"row message " + this.props.read? read : unread}>   </div>
 
 
@@ -8,9 +10,7 @@ class Message extends Component {
   constructor(props) {
     super(props);
 
-    this.toggleStar = this.toggleStar.bind(this);
-    this.toggleSelectedState = this.toggleSelectedState.bind(this);
-    this.toggleRead = this.toggleRead.bind(this);
+
   }
 
   findMessage = (event) => {
@@ -19,20 +19,7 @@ class Message extends Component {
 
   // NOTE REACT CODE to refactor
   //change state of message to
-  toggleRead() {
-    let messageId = this.props.id;
 
-    this.props.toggleRead(messageId);
-
-  }
-
-
-
-  toggleSelectedState() {
-    let messageId = this.props.id;
-
-    this.props.toggleCheckState(messageId);
-  }
 
   render() {
     let readState = this.props.read? 'read' : 'unread';
@@ -43,15 +30,15 @@ class Message extends Component {
         <div className="col-xs-1">
           <div className="row">
             <div className="col-xs-2">
-              <input type="checkbox" defaultChecked={this.props.checked} onClick={this.toggleSelectedState}/>
+              <input type="checkbox" defaultChecked={this.props.checked} onClick={()=> this.props.toggleSelectedState(this.props.id)}/>
             </div>
             <div className="col-xs-2">
-              <i className={`star fa + ${starredState}`} onClick={(event)=>  toggleStarState()}></i>
+              <i className={`star fa + ${starredState}`} onClick={(event)=>  this.props.toggleStarState(this.props.id)}></i>
             </div>
           </div>
         </div>
 {/* onClick={this.toggleRead}  fits below but doesnt target each message*/}
-      <div className="col-xs-11" onClick={this.toggleRead}>
+      <div className="col-xs-11" onClick={() =>{this.props.toggleRead(this.props.id)}}>
         {this.props.labels.map((label) =>
         <span key={label} className="label label-warning" > {label} </span>)}
         <a href="#" >
@@ -76,4 +63,19 @@ class Message extends Component {
   </a>
 </div> */}
 // </div>
-export default Message;
+const mapStateToProps = state => {
+  return {
+    messages: state.messages.messages,
+  }
+}
+const mapDispatchToProps = dispatch => bindActionCreators({
+  toggleSelectedState,
+  toggleRead,
+  // checked: this.props.selected,
+  toggleStarState,
+}, dispatch)
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Message);

@@ -4,4 +4,5 @@ import {messagesReducer} from './messagesReducer.js';
 
 export const rootReducer = combineReducers({
   messages: messagesReducer,
+
 })
