@@ -67,19 +67,23 @@ class App extends Component {
         <div>
           <ol>
             <h1>issues</h1>
-              <li>put the unread messages span back inside component</li>
-              <li>sendMessage prop not working causes re-render</li>
-              <ul>
-                <h4>fixed sendMessage by</h4>
-                <li>turning into functional component</li>
-                <li>fixing variable shadowing in sendMessage action</li>
-                <li>then noticed newmessage.id was missing in my mapping out of the messages component NEW BUG</li>
-                <li> adding thunk middleware to read max id Object.assign to max +1 STILL NEED TO DO THIS</li>
-                <li> this.props.messages.map is not a function
-App.render
-src/components/App.js:56 must have to do with incorrect state key assignments</li>
-              </ul>
+
               <li> minor - how to manipulate the state of just the lad / remove label logo so that it returns to " add / remove lable"</li>
+
+          </ol>
+          <ul>
+            <h3> closed issues</h3>
+            <li>  tollbarActions.js doesn't fire dispatch inside call to return dispatched object  </li>
+            <li>constant re-render of page when not IFE'd from an anonymous Fn in an onClick, onChange etc</li>
+            <li> state.messages.messages contains the related keys: composing, fetchingMessages and therefore I needed to map composing to props in order to access this.props.composing state </li>
+            <li>put the unread messages span back inside component</li>
+            <li>sendMessage prop not working causes re-render</li>
+            <ul>
+              <h4>fixed sendMessage by</h4>
+              <li>turning into functional component</li>
+              <li>fixing variable shadowing in sendMessage action</li>
+              <li>then noticed newmessage.id was missing in my mapping out of the messages component NEW BUG</li>
+              <li> adding thunk middleware to read max id Object.assign to max +1 STILL NEED TO DO THIS</li>
               <ul>
                 <h3>possible cause</h3>
                 <li>initialState not imported, returning undefined, should return false</li>
@@ -87,12 +91,10 @@ src/components/App.js:56 must have to do with incorrect state key assignments</l
                 <li>THEN -- on toggle event   </li>
                 <li>mpstp state.composing status-> undefined state.messages.composing status -> true</li>
               </ul>
-          </ol>
-          <ul>
-            <h3> closed issues</h3>
-            <li>  tollbarActions.js doesn't fire dispatch inside call to return dispatched object  </li>
-            <li>constant re-render of page when not IFE'd from an anonymous Fn in an onClick, onChange etc</li>
-            <li> state.messages.messages contains the related keys: composing, fetchingMessages and therefore I needed to map composing to props in order to access this.props.composing state </li>
+              <li> this.props.messages.map is not a function
+App.render
+src/components/App.js:56 must have to do with incorrect state key assignments</li>
+            </ul>
           </ul>
         </div>
         <pre>
