@@ -18,6 +18,18 @@ export const getAllMessages = () => {
   }
 }
 
+export const SHOW_FULL_MESSAGE = "SHOW_FULL_MESSAGE";
+export const openMessage = (message) => {
+  return async dispatch => {
+    let response = await fetch(message._links.self.href);
+    let jsonData = await response.json();
+    dispatch({
+      type: SHOW_FULL_MESSAGE,
+      message : message,
+      responseObj: jsonData
+    })
+  }
+}
 
 
 

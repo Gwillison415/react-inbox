@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {  bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link, Route, Switch, withRouter } from 'react-router-dom'
 import {
   // messageListStatusFn,
   removeOldLabel,
@@ -39,42 +40,12 @@ class Toolbar extends Component {
       }
     };
 
-
-
-
-
-    //finds all messages where messages are checked
-  // markRead = () => {
-  //   let checkedMessages = this.isChecked();
-  //
-  //   this.props.toggleAllRead(checkedMessages, 'read')
-  // }
-  // markUnread = () => {
-  //   let checkedMessages = this.isChecked();
-  //   this.props.toggleAllUnread(checkedMessages, 'read')
-  // }
-  //
-  // AddLabel = (event) => {
-  //     this.props.addNewLabel(event);
-  // }
-  // removeLabel = (event) => {
-  //     // console.log(event);
-  //     this.props.removeOldLabel(event);
-  // }
-  //
-  // deleteSelected = () => {
-  //   let selectedMessages = this.isChecked();
-  //   this.props.deleteSelectedMessages(selectedMessages)
-  // }
-  //
-  // toggleAddSelectedState = () => {
-  //   this.props.toggleAllCheckState();
-  // }
   let
   render() {
     // const read = this.props.read ? " read" : "unread";
     // const subject = this.props.subject ? this.props.subject.toString() : "";
     // const starred = this.props.starred ? "fa fa-star" : "fa fa-star-o";
+      const count = this.props.messages.filter(message => !message.read).length
     // const selected = this.props.selected ? "selected" : "";
     // const checked = this.props.selected ? "checked" : "";
 
@@ -82,14 +53,23 @@ class Toolbar extends Component {
       <div className="row toolbar">
         <div className="col-md-12">
           <p className="pull-right">
-            {this.props.unreadMessagesCount}
+            <span className="badge badge">{count}</span>
+
+            unread {count === 1 ? 'message' : 'messages'}
           </p>
-          <a className="btn btn-danger">
-            <i className="fa fa-plus" onClick={() => {
-              console.log('showComposeMessageForm EVENT FIRED');
-              this.props.showComposeMessageForm()
-            }}></i>
-          </a>
+          <Switch>
+          <Route path="/compose" render={ () => (
+            <Link className="btn btn-danger" to="/">
+              <i className={`fa fa-plus`}></i>
+            </Link>
+          )} />
+          <Route render={ () => (
+            <Link className="btn btn-danger" to="/compose">
+              <i className={`fa fa-plus`}></i>
+            </Link>
+          )} />
+        </Switch>
+
           <button className="btn btn-default">
             <i className={this.messageListStatusFn()} onClick={this.toggleAddSelectedState}></i>
           </button>
@@ -158,7 +138,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   showComposeMessageForm,
 }, dispatch)
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Toolbar);
+)(Toolbar))

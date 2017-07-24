@@ -1,17 +1,13 @@
  import React, { Component } from 'react';
-import { toggleStarState, toggleRead, toggleSelectedState } from '../actions/messageActions.js';
+import { toggleStarState, openMessage, toggleRead, toggleSelectedState } from '../actions/messageActions.js';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-// <div className={"row message " + this.props.read? read : unread}>   </div>
-
-
+import MessageBody from './MessageBody'
+import { withRouter, Route } from "react-router-dom";
+import history from '../index';
 
 class Message extends Component {
-  constructor(props) {
-    super(props);
 
-
-  }
 
   findMessage = (event) => {
     this.props.messages.find(message => message.id === event.target.id)
@@ -39,12 +35,15 @@ class Message extends Component {
         </div>
 {/* onClick={this.toggleRead}  fits below but doesnt target each message*/}
       <div className="col-xs-11" onClick={() =>{this.props.toggleRead(this.props.id)}}>
-        {this.props.labels.map((label) =>
-        <span key={label} className="label label-warning" > {label} </span>)}
+        {this.props.labels.map((label, idx) =>
+        <span key={idx} className="label label-warning" > {label} </span>)}
         <a href="#" >
           {this.props.subject}
         </a>
       </div>
+      <Route path={`/messages/${this.props.id}`} render={props => {
+        <MessageBody message={this.props.message} openMessage={this.openMessage}></MessageBody>
+      }}></Route>
       </div>
 
     );
@@ -71,11 +70,13 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => bindActionCreators({
   toggleSelectedState,
   toggleRead,
-  // checked: this.props.selected,
+  openMessage,
   toggleStarState,
 }, dispatch)
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Message);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Message)
+);

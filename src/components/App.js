@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {initialState} from '../reducers/initialState';
 import store from '../store';
-
+import { withRouter, Route } from "react-router-dom";
 import {
   getAllMessages,
   sendMessage,
@@ -43,11 +43,13 @@ class App extends Component {
             applyLabel={this.props.applyLabel}
             removeLabel={this.props.removeLabel}
             showComposeMessageForm={this.props.showComposeMessageForm}/>
-        </div>
-        <div>
-          {this.props.composing ?
-            <MessageComposer sendMessage={ this.props.sendMessage }  /> :
-             null}
+
+          <Route path ="/compose" render={props => (
+            <MessageComposer sendMessage={ this.props.sendMessage }  />
+
+          )}
+
+          />
 
         </div>
         <div>
@@ -58,7 +60,7 @@ class App extends Component {
               read={message.read}
               id={message.id}
               toggleStarState = {this.toggleStarState} toggleCheckState={this.toggleCheckState}
-              toggleRead={this.toggleRead} />
+              toggleRead={this.toggleRead} message={message}/>
             })} }
           </div>
 
@@ -120,7 +122,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   toggleStarState,
 }, dispatch)
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(App);
+)(App));
