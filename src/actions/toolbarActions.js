@@ -1,10 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-import {
-  toggleProperty,
-
-} from '../actions/index';
-import store from '../store';
 
 export const REMOVE_LABEL_FROM_MESSAGE = "REMOVE_LABEL_FROM_MESSAGE";
 
@@ -21,28 +16,41 @@ export const AddLabel = ((newLabel) => {
     dispatch({type: ADD_LABEL_FROM_MESSAGE, label: newLabel})
   }
 })
-// export const removeOldLabel = ((getCheckedMessages(store.messages.selected), oldLabel) =>  {
-//
-//   return async (dispatch) => {
-//     dispatch({type: REMOVE_LABEL_FROM_MESSAGE, oldLabel})
-//   }
-//
-// });
-export const messageListStatusFn = () => {
-  let toggledMessages = this.isChecked();
 
-  const unchecked = "fa fa-square-o";
-  const someChecked = "fa fa-minus-square-o";
-  const checked = "fa fa-check-square-o";
+export const DELETE_MESSAGE = "DELETE_MESSAGE";
+export const deleteSelected = (messages) => {
+  return (dispatch) => {
+    console.log("DELETE MESSAGE DISPATCH");
+    dispatch({type: DELETE_MESSAGE})
 
-    if (toggledMessages.length === this.props.messages.length) {
-      return checked;
-    } else if (toggledMessages.length > 0) {
-      return someChecked;
-    } else if (toggledMessages.length === 0) {
-      return unchecked;
-    }
-  };
+  }
+}
+
+export const MARK_UNREAD = "MARK_UNREAD";
+export const markUnread = () => {
+  return (dispatch) => {
+    dispatch({
+      type: MARK_UNREAD,
+    })
+  }
+}
+export const MARK_READ = "MARK_READ";
+export const markRead = () => {
+  return (dispatch) => {
+    dispatch({
+      type: MARK_READ,
+    })
+  }
+}
+export const TOGGLE_COMPOSE = "TOGGLE_COMPOSE"
+export const showComposeMessageForm = () => {
+  return dispatch => {
+    dispatch({
+      type : TOGGLE_COMPOSE,
+
+    })
+  }
+}
 export const unreadMessagesCount = () => {
     let count = this.props.messages.reduce((total, message) => {
       if (message.read === false) total++;
@@ -54,10 +62,3 @@ export const unreadMessagesCount = () => {
         </span>
       );
     };
-
-const  isChecked = () =>  {
-    return this.props.messages.filter(message => message.checked);
-  }
-const getCheckedMessages = (selectedMessages) => {
-  return selectedMessages.filter(message => message.checked);
-}

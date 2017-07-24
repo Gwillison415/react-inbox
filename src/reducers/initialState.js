@@ -1,6 +1,6 @@
 export const initialState = {
   messages: [],
   fetchingMessages: true,
-  creatingMessage: false,
+  creatingNewMessage: false,
   composing: false,
 };

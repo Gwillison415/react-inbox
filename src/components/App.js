@@ -7,7 +7,7 @@ import MessageComposer from './messageComposer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {initialState} from '../reducers/initialState';
-
+import store from '../store';
 
 import {
   getAllMessages,
@@ -28,174 +28,9 @@ class App extends Component {
   }
 
 
-
-
-//
-//  toggleCompose() {
-//    this.setState({composing: !this.state.composing})
-//  }
-//   /* -----------------------------------------------------------------------
-//                               helper functions
-//   ------------------------------------------------------------------------*/
-//   targetMessage = (messageId) => { return this.state.list.find(message => message.id === messageId)
-//   }
-//
-//
-//   getCheckedMessages(messages){
-//     return messages.filter(message => message.checked);
-//   }
-//   // in future refactor LOSE toggleProperty and just use toggleAllProperty because: callback is always best to avoid strange behavior
-//   // NOTE without the callback in setState only my last in a list was toggled
-//   toggleAllProperty(message, property){
-//
-//     this.setState(prevState => {
-//       const index = prevState.list.indexOf(message);
-//       return {
-//         list: [
-//           ...prevState.list.slice(0, index),
-//           { ...message, [property]: !message[property] },
-//           ...prevState.list.slice(index + 1)
-//         ]
-//       };
-//     });
-//
-//   }
-//   deleteObject(message) {
-//     this.setState(prevState => {
-//       const index = prevState.list.indexOf(message);
-//       return {
-//         list: [
-//           ...prevState.list.slice(0, index),
-//           ...prevState.list.slice(index + 1)
-//         ]
-//       };
-//     });
-//   }
-//   toggleProperty(message, property){
-//     const index = this.state.list.indexOf(message);
-//
-//     this.setState({
-//       list: [
-//         ...this.state.list.slice(0, index), // old message up to idx
-//         {...message, [property] : !message[property]}, // new message
-//         ...this.state.list.slice(index + 1)  // messages past new message
-//       ]
-//     })
-//   }
-//
-//   /* -----------------------------------------------------------------------
-//   Toolbar Functions
-//   ------------------------------------------------------------------------*/
-//
-//   // small performance cost to calling setState multiple times
-//   toggleAllRead(messages, property) {
-//     messages.forEach((message) => {
-//       if (!message.read) {
-//         return this.toggleAllProperty(message, property)
-//       }
-//     });
-//   }
-// //whenever you're using setState that depends on old state USE A CALLBACK (as above with prevstate)
-//     //if you're gonna set the new state that requires understanding of old state
-//
-//   toggleAllUnread(messages, property) {
-//     messages.forEach((message) => {
-//       if (message.read) {
-//         return this.toggleAllProperty(message, property)
-//       }
-//     });
-//   }
-//
-//   addNewLabel(newLabel) {
-//     let selectedMessages = this.getCheckedMessages(this.state.list)
-//
-//     let messageWithUpdatedLabels = selectedMessages.map(message => {
-//       if (!message.labels.includes(newLabel)) {
-//         message.labels.push(newLabel)
-//       }
-//     });
-//     // refactor to reflect immutability helper Fn like toggleAllProperty
-//     this.setState(messageWithUpdatedLabels);
-//   }
-//
-//
-//   deleteSelectedMessages(selectedMessages) {
-//       selectedMessages.forEach(message => this.deleteObject(message));
-//   }
-//
-//   toggleAllCheckState() {
-//     console.log(this.state.list.length);
-//     this.state.list.forEach(message => this.toggleAllProperty(message, 'checked'));
-//   }
-//   /* -----------------------------------------------------------------------
-//                               Message Functions
-//   ------------------------------------------------------------------------*/
-//   //  change to state of single message
-//
-//   toggleRead(messageId) {
-//     let targetedMessage = this.targetMessage(messageId);
-//     this.toggleProperty(targetedMessage, 'read')
-//     // this.list.targetedMessage.setState({ read: !this.state.read })
-//   }
-//   toggleStarState(messageId){
-//     let targetedMessage = this.targetMessage(messageId);
-//     this.toggleProperty(targetedMessage, 'starred');
-//   }
-//
-//   toggleCheckState(messageId) {
-//     let targetedMessage = this.targetMessage(messageId);
-//     this.toggleProperty(targetedMessage, 'checked');
-//   }
-//
-//
-
- /* -----------------------------------------------------------------------
- Message Composer Functions
- ------------------------------------------------------------------------*/
-// NOTE old code- probably deleting
- // async sendMessage(messageObj) {
- //   const response =  await this.makeAPIrequest( 'POST', {
- //     subject: messageObj.subject,
- //     body: messageObj.body,
- //   })
- //   const newMessage =  await response.json()
- //
- //   this.setState(prevState => {
- //     return {
- //       list : [
- //       ...prevState.list,
- //       newMessage
- //     ],
- //     composing: false,
- //   }})
- // }
-
-//mangled code
-// async sendMessage(messageObj) {
-//   const response =  await this.makeAPIrequest( 'POST', {
-//     subject: messageObj.subject,
-//     body: messageObj.body,
-//   })
-//   const newMessage =  await response.json()
-//
-//
-//   this.setState(prevState => {
-//     return {
-//       list = [...prevState.list, newMessage],
-//       composing: false,
-//     }
-//   })
-// }
-
-
- toggleCompose() {
-   console.log(this.state.composing);
-   this.setState({composing: !this.state.composing})
- }
-
   render() {
-    if (this.props.messages === undefined) {
-      return <div>Loading</div>
+    if (this.props.messages === undefined ) {
+      return <div>Loading Inbox</div>
     }
     return (
       <div>
@@ -207,33 +42,59 @@ class App extends Component {
             toggleSelectAll={this.props.toggleSelectAll}
             applyLabel={this.props.applyLabel}
             removeLabel={this.props.removeLabel}
-            toggleCompose={this.props.toggleCompose}/>
+            showComposeMessageForm={this.props.showComposeMessageForm}/>
         </div>
         <div>
           {this.props.composing ?
-            <MessageComposer sendMessage={ this.onSendMessage } list={this.props.messsages} /> :
+            <MessageComposer sendMessage={ this.props.sendMessage }  /> :
              null}
 
         </div>
         <div>
-          {console.log("all props from app.js", this.props)}
-            {this.props.messages.map((message) => {
+          {/* {console.log("all MESSAGES from app.js", this.props)} */}
+
+            {this.props.fetchingMessages? <h4>loading</h4> : this.props.messages.map((message) => {
               return   <Message key={message.id} labels={message.labels} subject={message.subject} starred={message.starred} checked={message.checked}
               read={message.read}
               id={message.id}
               toggleStarState = {this.toggleStarState} toggleCheckState={this.toggleCheckState}
               toggleRead={this.toggleRead} />
-            })}
+            })} }
           </div>
 
         <div>
           <ol>
-            <h3>issues</h3>
-            <li>    </li>
+            <h1>issues</h1>
+              <li>put the unread messages span back inside component</li>
+              <li>sendMessage prop not working causes re-render</li>
+              <ul>
+                <h4>fixed sendMessage by</h4>
+                <li>turning into functional component</li>
+                <li>fixing variable shadowing in sendMessage action</li>
+                <li>then noticed newmessage.id was missing in my mapping out of the messages component NEW BUG</li>
+                <li> adding thunk middleware to read max id Object.assign to max +1 STILL NEED TO DO THIS</li>
+                <li> this.props.messages.map is not a function
+App.render
+src/components/App.js:56 must have to do with incorrect state key assignments</li>
+              </ul>
+              <li> minor - how to manipulate the state of just the lad / remove label logo so that it returns to " add / remove lable"</li>
+              <ul>
+                <h3>possible cause</h3>
+                <li>initialState not imported, returning undefined, should return false</li>
+                <li>mpstp state.composing status-> undefined state.messages.composing status -> undefined</li>
+                <li>THEN -- on toggle event   </li>
+                <li>mpstp state.composing status-> undefined state.messages.composing status -> true</li>
+              </ul>
           </ol>
+          <ul>
+            <h3> closed issues</h3>
+            <li>  tollbarActions.js doesn't fire dispatch inside call to return dispatched object  </li>
+            <li>constant re-render of page when not IFE'd from an anonymous Fn in an onClick, onChange etc</li>
+            <li> state.messages.messages contains the related keys: composing, fetchingMessages and therefore I needed to map composing to props in order to access this.props.composing state </li>
+          </ul>
         </div>
         <pre>
-          {JSON.stringify(this.props.store, null, 2)};
+          {JSON.stringify(this.store, null, 2)};
         </pre>
       </div>
 
@@ -243,12 +104,12 @@ class App extends Component {
 // probably need to map state.messages.messagesByID to the object i've created to enforce the contract I have established
 
 const mapStateToProps = state => {
-  console.log('mpstp', state);
+  console.log('mpstp state.composing status->', state.composing, "state.messages.composing status ->", state.messages.composing, "state.messages =", state.messages, "state.messages.messages=",   state.messages.messages);
   return {
-    store : state,
-    messagesObj : state.messages,
+
+    // messagesObj : state.messages,
     messages: state.messages.messages,
-    composing : state.composing,
+    composing : state.messages.composing,
   }
 
 }

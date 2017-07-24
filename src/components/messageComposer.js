@@ -1,32 +1,34 @@
 import React, { Component } from "react";
+import {  bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import {
+  sendMessage,
+} from '../actions/messageActions';
+// class MessageComposer extends Component {
+const MessageComposer = ({ sendMessage })=> {
 
-class MessageComposer extends Component {
-  constructor(props) {
-    super(props);
-    // this.submitForm = this.submitForm.bind(this);
-
-  }
-
-
-
-
-  submitForm= (event) => {
+  const submitForm = (event) => {
     event.preventDefault();
-    this.props.sendMessage({
+    // console.log("COMPOSER _ > HITS submitForm");
+    sendMessage({
       subject : event.target.subject.value,
-      body : event.target.value
+      body : event.target.body.value
     })
   }
-  render() {
-    const message = this.props.subject ? "Compose Message" : "";
+
+
+
+  // render() {
+  //   const message = this.props.subject ? "Compose Message" : "";
 
 
     return (
-      <form className="form-horizontal well" onSubmit={ this.submitForm }>
+      <form className="form-horizontal well" onSubmit={submitForm} >
         <div className="form-group">
           <div className="col-sm-8 col-sm-offset-2">
             <h4>
-              {message}
+              Compose Message
+              {/* {message} */}
             </h4>
           </div>
         </div>
@@ -60,6 +62,17 @@ class MessageComposer extends Component {
       </form>
     );
   }
-}
+// }
 
-export default MessageComposer;
+// const mapStateToProps = state => {
+//   return {
+//     messages: state.messages.messages,}
+// };
+const mapDispatchToProps = dispatch => bindActionCreators({
+  sendMessage,
+}, dispatch);
+export default connect(
+  // mapStateToProps,
+  null,
+  mapDispatchToProps,
+)(MessageComposer);
