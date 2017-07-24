@@ -37,11 +37,15 @@ class Message extends Component {
       <div className="col-xs-11" onClick={() =>{this.props.toggleRead(this.props.id)}}>
         {this.props.labels.map((label, idx) =>
         <span key={idx} className="label label-warning" > {label} </span>)}
-        <a href="#" >
+        <a onClick= { (event) => {
+          event.preventDefault();
+          this.props.history.push(`/messages/${this.props.message.id}`)
+        }} >
           {this.props.subject}
         </a>
       </div>
-      <Route path={`/messages/${this.props.id}`} render={props => {
+      <Route path={`/messages/${this.props.id}`}
+      render={props => {
         <MessageBody message={this.props.message} openMessage={this.openMessage}></MessageBody>
       }}></Route>
       </div>

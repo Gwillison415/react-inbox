@@ -11,6 +11,7 @@ import {
     TOGGLE_READ,
     SUBMIT_COMPOSED_MESSAGE,
     SENDING_MESSAGE_STARTED,
+    SHOW_FULL_MESSAGE,
 } from '../actions/messageActions'
 
 import {
@@ -128,6 +129,21 @@ export const messagesReducer = (state = initialState, action) => {
       // },
       creatingNewMessage: false,
     }
+
+    case SHOW_FULL_MESSAGE:
+      const index = state.messages.indexOf(action.message)
+      return {
+        ...state,
+        messages: [
+          ...state.messages.slice(0, index),
+          {
+            ...action.message,
+            body: action.fullMessage.body,
+            read: true
+          },
+          ...state.messages.slice(index + 1),
+        ]
+      }
     default:
 
     return {

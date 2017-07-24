@@ -69,6 +69,7 @@ class App extends Component {
             <h1>issues</h1>
 
               <li> minor - how to manipulate the state of just the lad / remove label logo so that it returns to " add / remove lable"</li>
+              <li>show message body</li>
 
           </ol>
           <ul>
