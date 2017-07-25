@@ -39,14 +39,15 @@ class Message extends Component {
         <span key={idx} className="label label-warning" > {label} </span>)}
         <a onClick= { (event) => {
           event.preventDefault();
-          this.props.history.push(`/messages/${this.props.message.id}`)
+          console.log("inside onClick we have an id = ", this.props.id);
+          this.props.history.push(`/messages/${this.props.id}`)
         }} >
           {this.props.subject}
         </a>
       </div>
       <Route path={`/messages/${this.props.id}`}
       render={props => {
-        <MessageBody message={this.props.message} openMessage={this.openMessage}></MessageBody>
+        return <MessageBody message={this.props.message} openMessage={this.props.openMessage} {...props}></MessageBody>
       }}></Route>
       </div>
 
@@ -73,6 +74,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => bindActionCreators({
   toggleSelectedState,
+  
   toggleRead,
   openMessage,
   toggleStarState,

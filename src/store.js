@@ -7,7 +7,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import {initialState} from './reducers/initialState';
 
 const logger = (store) => (next) => action => {
-  console.log('action fired', action);
+  console.log(`${action.type} action fired`);
   next(action);
 }
 

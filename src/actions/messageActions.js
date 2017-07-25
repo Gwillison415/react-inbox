@@ -20,6 +20,7 @@ export const getAllMessages = () => {
 
 export const SHOW_FULL_MESSAGE = "SHOW_FULL_MESSAGE";
 export const openMessage = (message) => {
+  console.log("HITS openMessage ACTION CREATOR");
   return async dispatch => {
     let response = await fetch(message._links.self.href);
     let jsonData = await response.json();
@@ -72,7 +73,7 @@ export const toggleRead = (id) => {
 export const SENDING_MESSAGE_STARTED = "SENDING_MESSAGE_STARTED";
 export const SUBMIT_COMPOSED_MESSAGE = "SUBMIT_COMPOSED_MESSAGE";
 let sendCount = 0;
-export const sendMessage = (message) => {
+export const sendMessage = (message, history) => {
   sendCount++;
   console.log( `HITS SENDMESSAGE ${sendCount} times and nextMessageID = ${nextMessageID}`);
   return async (dispatch) => {
@@ -84,6 +85,7 @@ export const sendMessage = (message) => {
     let newMessage = await serverResponse.json();
     dispatch({ type : SUBMIT_COMPOSED_MESSAGE, message: newMessage, id: nextMessageID++})
     console.log(`ASYNC COMPLETE newMessage= ${newMessage} nextMessageID= ${nextMessageID}`);
+    history.push('/');
   }
 
 }

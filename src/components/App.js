@@ -45,7 +45,7 @@ class App extends Component {
             showComposeMessageForm={this.props.showComposeMessageForm}/>
 
           <Route path ="/compose" render={props => (
-            <MessageComposer sendMessage={ this.props.sendMessage }  />
+            <MessageComposer sendMessage={ this.props.sendMessage } {...props} />
 
           )}
 

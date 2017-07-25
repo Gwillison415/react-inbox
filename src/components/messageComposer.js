@@ -5,7 +5,7 @@ import {
   sendMessage,
 } from '../actions/messageActions';
 // class MessageComposer extends Component {
-const MessageComposer = ({ sendMessage })=> {
+const MessageComposer = ({ sendMessage, history })=> {
 
   const submitForm = (event) => {
     event.preventDefault();
@@ -13,7 +13,9 @@ const MessageComposer = ({ sendMessage })=> {
     sendMessage({
       subject : event.target.subject.value,
       body : event.target.body.value
-    })
+    },
+    history
+  )
   }
 
 

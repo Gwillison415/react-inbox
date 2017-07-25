@@ -19,7 +19,7 @@ class Toolbar extends Component {
 
   isSelected = () =>  {
        const selectedMessages1 = this.props.messages.filter(message => message.selected);
-       console.log("selectedMessages1", selectedMessages1);
+      //  console.log("selectedMessages1", selectedMessages1);
        return selectedMessages1;
     }
   messageListStatusFn = () => {

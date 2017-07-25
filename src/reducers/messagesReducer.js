@@ -138,7 +138,7 @@ export const messagesReducer = (state = initialState, action) => {
           ...state.messages.slice(0, index),
           {
             ...action.message,
-            body: action.fullMessage.body,
+            body: action.responseObj.body,
             read: true
           },
           ...state.messages.slice(index + 1),
