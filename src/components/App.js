@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Toolbar from './Toolbar'
+import Toolbar from './toolbar'
 import Messages from './Messages'
 import ComposeMessage from './ComposeMessage'
 import {
